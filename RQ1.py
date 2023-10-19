@@ -26,10 +26,10 @@ if(dataset=='ukr_v3'):
 elif(dataset=='skrip_v7'):
     name = 'Skripal'
 
-results_dir = 'multilayer-network/plots'
+results_dir = f'plots/{name}'
 
-in_infl_wdf = pd.read_csv(f'multilayer-network/Data/preprocessed/{dataset}_in_infl_weights_df.csv')
-out_infl_wdf = pd.read_csv(f'multilayer-network/Data/preprocessed/{dataset}_out_infl_weights_df.csv')
+in_infl_wdf = pd.read_csv(f'Data/preprocessed/{dataset}_in_infl_weights_df.csv')
+out_infl_wdf = pd.read_csv(f'Data/preprocessed/{dataset}_out_infl_weights_df.csv')
 
 ######## Heatmaps for each influence type #########
 
@@ -135,7 +135,7 @@ part_df = part_df[ \
             ]
 
 
-part_df.to_csv(f'multilayer-network/results/{dataset}_out_part_coef.csv')
+part_df.to_csv(f'results/{dataset}_out_part_coef.csv')
 
 ### new participant coefficient functions ###
 ## Sources/outdegree ##
