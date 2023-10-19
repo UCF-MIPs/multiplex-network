@@ -1,6 +1,7 @@
 src/__pycache__
 results/*
 Data/*
+data/*
 plots/*
 *.swp
 src/*.swp
