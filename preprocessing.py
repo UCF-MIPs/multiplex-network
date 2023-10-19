@@ -1,7 +1,6 @@
 import networkx as nx
 import pandas as pd
 import numpy as np
-from pathlib import Path
 from src import generate_edge_types
 from src import add_aggregate_networks
 
