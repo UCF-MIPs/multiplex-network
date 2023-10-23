@@ -13,7 +13,7 @@ pd.set_option('display.max_columns', None)
 edge_types = generate_edge_types.generate_edge_types()
 edge_types = edge_types + ['TM_*', 'TF_*', 'UM_*', 'UF_*', '*_TM', '*_TF', '*_UM', '*_UF']
 
-dataset = 'skrip_v7' # options: skrip_v7, ukr_v3
+dataset = 'ukr_v3' # options: skrip_v7, ukr_v3
 
 # TODO fix? not sure if *_* == total_te
 if dataset=='ukr_v3':
