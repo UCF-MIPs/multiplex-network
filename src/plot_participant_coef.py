@@ -12,6 +12,7 @@ def part_coef_plot_out(inf, df, name, results_dir):
               ylabel=f'Participant Coefficient of {name} {inf} Sources')
     pc_sc.set_xlim(0,25)
     pc_sc.set_ylim(0,1)
+    pc_sc.set_title(f'Participant Coefficient of {name} {inf} Sources')
     fig = pc_sc.get_figure()
     fig.savefig(f'{results_dir}/{name}_{inf}_pc_out.png')
     
@@ -24,5 +25,6 @@ def part_coef_plot_in(inf, df, name, results_dir):
               ylabel=f'Participant Coefficient of {name} {inf} Targets')
     pc_sc.set_xlim(0,25)
     pc_sc.set_ylim(0,1)
+    pc_sc.set_title(f'Participant Coefficient of {name} {inf} Targets')
     fig = pc_sc.get_figure()
     fig.savefig(f'{results_dir}/{name}_{inf}_pc_in.png')
