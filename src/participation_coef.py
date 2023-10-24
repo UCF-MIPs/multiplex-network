@@ -24,6 +24,7 @@ def part_coef(df, sour_infl):
 
 ### new participant coefficient functions ###
 ## Sources/outdegree ##
+#TODO make so this doesn't overwrite previous df
 def part_coef_out(df, inf, layers):
     '''
     input: df of aggregated weight of out edges

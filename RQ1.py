@@ -1,11 +1,6 @@
 #TODO
-# move generated dfs from node_correlation to results folder
-# Get participation coeff working
 # get ukr/skrip working simultaneously in node_correlation
-# put plotting functions into loops
 # put participation coeff calculations in loops
-# move part coeff function to src
-# isolate code for paper from the influence trees stuff
 
 import pandas as pd
 import numpy as np
@@ -19,8 +14,8 @@ from src import participation_coef as part_coef
 pd.set_option('display.max_rows', None)
 #pd.set_option('display.max_columns', None)
 
-edge_types = ['TM_*', 'TF_*', 'UM_*', 'UF_*', '*_TM', '*_TF', '*_UM', '*_UF']
-dataset = 'ukr_v3' # options: skrip_v7, ukr_v3
+#edge_types = ['TM_*', 'TF_*', 'UM_*', 'UF_*', '*_TM', '*_TF', '*_UM', '*_UF']
+dataset = 'skrip_v7' # options: skrip_v7, ukr_v3
 
 if(dataset=='ukr_v3'):
     name = 'Ukraine'

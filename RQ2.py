@@ -8,10 +8,18 @@ from src import generate_edge_types
 from src import plot_heatmap
 from src import layer_correlation
 
-dataset = 'skrip_v7' # options: skrip_v7, ukr_v3
-# Data
 
-datapath = 'data/RQ2_heatmap_df.csv'
+edge_types = generate_edge_types.generate_edge_types()
+edge_types = edge_types + ['TM_*', 'TF_*', 'UM_*', 'UF_*', '*_TM', '*_TF', '*_UM', '*_UF']
+
+dataset = 'ukr_v3' # options: skrip_v7, ukr_v3
+
+if(dataset=='ukr_v3'):
+    name = 'Ukraine'
+if(dataset=='skrip_v7'):
+    name = 'Skripal'
+
+datapath = f'results/RQ2_{name}_heatmap_df.csv'
 results_dir='results'
 
 if os.path.exists(datapath):
@@ -33,8 +41,12 @@ else:
     for i in edge_types:
         for j in edge_types:
             df_heatmap.at[i, j] = layer_correlation.layer_correlation(TE_df, i, j)
-    df_heatmap.to_csv(f'RQ2_heatmap_df.csv')
+    df_heatmap.to_csv(f'{results_dir}/RQ2_{name}_heatmap_df.csv')
 
-plot_heatmap.plot_layer_heatmap(df_heatmap, results_dir)
+# drop columns if they are not an influence type:
+print(df_heatmap)
+df_heatmap = df_heatmap[df_heatmap.columns.intersection(edge_types)]
+print(df_heatmap)
+plot_heatmap.plot_layer_heatmap(df_heatmap, name, results_dir)
 
 

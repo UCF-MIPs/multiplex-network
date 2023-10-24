@@ -90,12 +90,12 @@ def plot_user_heatmap_outdegree(inf, df, name, results_dir):
 
 # creating plots for the same targets
 
-def plot_layer_heatmap(df, results_dir):
+def plot_layer_heatmap(df, name, results_dir):
     '''
     df:             dataframe of correlation between layers
                     16x16 matrix of influence types
     results_dir:    string of results dir
     '''
-    ax = sns.heatmap(df, linewidth=0.5)
+    ax = sns.heatmap(df, linewidth=0.5, vmin=0, vmax=1)
     plt.tight_layout()
-    plt.savefig(f'{results_dir}/layer_correlation_heatmap.png')
+    plt.savefig(f'{results_dir}/{name}_layer_correlation_heatmap.png')
