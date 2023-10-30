@@ -1,3 +1,5 @@
+import pandas as pd
+
 def layer_correlation(df, source, target):
     sum_of_numerator = 0
     sum_of_denominator = 0

@@ -81,6 +81,6 @@ for dataset in dataset_list:
                 row_index = in_infl_weights_df.index[in_infl_weights_df['actors']==node].to_list()
                 in_infl_weights_df.loc[row_index, [edge_type]]=summed_weight
 
-    out_infl_weights_df.to_csv(f'Data/preprocessed/{dataset}_out_infl_weights_df.csv')
-    in_infl_weights_df.to_csv(f'Data/preprocessed/{dataset}_in_infl_weights_df.csv')
+    out_infl_weights_df.to_csv(f'Data/preprocessed/{dataset}/{dataset}_out_infl_weights_df.csv')
+    in_infl_weights_df.to_csv(f'Data/preprocessed/{dataset}/{dataset}_in_infl_weights_df.csv')
 

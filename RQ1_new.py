@@ -18,8 +18,8 @@ for dataset in dataset_list:
     results_dir_in = f'plots/{dataset}/Targets'
     results_dir_out = f'plots/{dataset}/Sources'
 
-    in_infl_wdf = pd.read_csv(f'Data/preprocessed/{dataset}_in_infl_weights_df.csv')
-    out_infl_wdf = pd.read_csv(f'Data/preprocessed/{dataset}_out_infl_weights_df.csv')
+    in_infl_wdf = pd.read_csv(f'Data/preprocessed/{dataset}/{dataset}_in_infl_weights_df.csv')
+    out_infl_wdf = pd.read_csv(f'Data/preprocessed/{dataset}/{dataset}_out_infl_weights_df.csv')
 
     ######## Heatmaps for each influence type #########
 
