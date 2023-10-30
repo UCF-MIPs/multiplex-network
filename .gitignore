@@ -6,4 +6,4 @@ plots/*
 *.swp
 src/*.swp
 .DS_store
-train.ipynb
+*.ipynb

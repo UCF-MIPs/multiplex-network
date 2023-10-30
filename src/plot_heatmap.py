@@ -4,10 +4,11 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import seaborn as sns
 
 # creating plots for the same targets
 
-def plot_heatmap_indegree(inf, df, name, results_dir):
+def plot_user_heatmap_indegree(inf, df, name, results_dir):
     '''
     inf:             influence type
     df:             dataframe, ex// TM_out_aggr_wdf, or
@@ -47,7 +48,7 @@ def plot_heatmap_indegree(inf, df, name, results_dir):
 
 ## creating plots for the same sources
 
-def plot_heatmap_outdegree(inf, df, name, results_dir):
+def plot_user_heatmap_outdegree(inf, df, name, results_dir):
     '''
     inf:             source influence type
     df:             dataframe, ex// TM_out_aggr_wdf, or
@@ -85,3 +86,16 @@ def plot_heatmap_outdegree(inf, df, name, results_dir):
     ax.set_aspect('auto')
     plt.savefig(f'{results_dir}/{name}_{inf}_out_activity.png')
 
+
+
+# creating plots for the same targets
+
+def plot_layer_heatmap(df, name, results_dir):
+    '''
+    df:             dataframe of correlation between layers
+                    16x16 matrix of influence types
+    results_dir:    string of results dir
+    '''
+    ax = sns.heatmap(df, linewidth=0.5, vmin=0, vmax=1)
+    plt.tight_layout()
+    plt.savefig(f'{results_dir}/{name}_layer_correlation_heatmap.png')

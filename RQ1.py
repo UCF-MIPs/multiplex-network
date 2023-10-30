@@ -1,11 +1,6 @@
 #TODO
-# move generated dfs from node_correlation to results folder
-# Get participation coeff working
 # get ukr/skrip working simultaneously in node_correlation
-# put plotting functions into loops
 # put participation coeff calculations in loops
-# move part coeff function to src
-# isolate code for paper from the influence trees stuff
 
 import pandas as pd
 import numpy as np
@@ -14,6 +9,7 @@ import matplotlib as mpl
 import seaborn as sns
 from src import plot_heatmap
 from src import plot_participant_coef
+from src import participation_coef as part_coef
 
 pd.set_option('display.max_rows', None)
 #pd.set_option('display.max_columns', None)
@@ -38,13 +34,13 @@ out_infl_wdf = pd.read_csv(f'Data/preprocessed/{dataset}_out_infl_weights_df.csv
 UM_out_aggr_wdf = out_infl_wdf[['actors', 'UM_*', 'UM_UM', 'UM_UF', 'UM_TM', 'UM_TF']]
 UM_out_aggr_wdf = UM_out_aggr_wdf.loc[UM_out_aggr_wdf['UM_*'] !=0]
 UM_out_aggr_wdf = UM_out_aggr_wdf.sort_values(by=['UM_*'], ascending=False).dropna()
-plot_heatmap.plot_heatmap_outdegree('UM', UM_out_aggr_wdf, name, results_dir)
+plot_heatmap.plot_user_heatmap_outdegree('UM', UM_out_aggr_wdf, name, results_dir)
 
 ## Targets/ Incoming ##
 UM_in_aggr_wdf = in_infl_wdf[['actors', '*_UM', 'UM_UM', 'TM_UM', 'UF_UM', 'TF_UM']]
 UM_in_aggr_wdf = UM_in_aggr_wdf.loc[UM_in_aggr_wdf['*_UM'] !=0]
 UM_in_aggr_wdf = UM_in_aggr_wdf.sort_values(by=['*_UM'], ascending=False).dropna()
-plot_heatmap.plot_heatmap_indegree('UM', UM_in_aggr_wdf, name, results_dir)
+plot_heatmap.plot_user_heatmap_indegree('UM', UM_in_aggr_wdf, name, results_dir)
 
 
 
@@ -53,13 +49,13 @@ plot_heatmap.plot_heatmap_indegree('UM', UM_in_aggr_wdf, name, results_dir)
 TM_out_aggr_wdf = out_infl_wdf[['actors', 'TM_*', 'TM_TM', 'TM_UM', 'TM_TF', 'TM_UF']]
 TM_out_aggr_wdf = TM_out_aggr_wdf.loc[TM_out_aggr_wdf['TM_*'] !=0]
 TM_out_aggr_wdf = TM_out_aggr_wdf.sort_values(by=['TM_*'], ascending=False).dropna()
-plot_heatmap.plot_heatmap_outdegree('TM', TM_out_aggr_wdf, name, results_dir)
+plot_heatmap.plot_user_heatmap_outdegree('TM', TM_out_aggr_wdf, name, results_dir)
 
 ## Targets/ Incoming ##
 TM_in_aggr_wdf = in_infl_wdf[['actors', '*_TM', 'TM_TM', 'UM_TM', 'TF_TM', 'UF_TM']]
 TM_in_aggr_wdf = TM_in_aggr_wdf.loc[TM_in_aggr_wdf['*_TM'] !=0]
 TM_in_aggr_wdf = TM_in_aggr_wdf.sort_values(by=['*_TM'], ascending=False).dropna()
-plot_heatmap.plot_heatmap_indegree('TM', TM_in_aggr_wdf, name, results_dir)
+plot_heatmap.plot_user_heatmap_indegree('TM', TM_in_aggr_wdf, name, results_dir)
 
 
 
@@ -68,13 +64,13 @@ plot_heatmap.plot_heatmap_indegree('TM', TM_in_aggr_wdf, name, results_dir)
 UF_out_aggr_wdf = out_infl_wdf[['actors', 'UF_*', 'UF_UF', 'UF_TF', 'UF_UM', 'UF_TM']]
 UF_out_aggr_wdf = UF_out_aggr_wdf.loc[UF_out_aggr_wdf['UF_*'] !=0]
 UF_out_aggr_wdf = UF_out_aggr_wdf.sort_values(by=['UF_*'], ascending=False).dropna()
-plot_heatmap.plot_heatmap_outdegree('UF', UF_out_aggr_wdf, name, results_dir)
+plot_heatmap.plot_user_heatmap_outdegree('UF', UF_out_aggr_wdf, name, results_dir)
 
 ## Targets/ Incoming ##
 UF_in_aggr_wdf = in_infl_wdf[['actors', '*_UF', 'UF_UF', 'TF_UF', 'UM_UF', 'TM_UF']]
 UF_in_aggr_wdf = UF_in_aggr_wdf.loc[UF_in_aggr_wdf['*_UF'] !=0]
 UF_in_aggr_wdf = UF_in_aggr_wdf.sort_values(by=['*_UF'], ascending=False).dropna()
-plot_heatmap.plot_heatmap_indegree('UF', UF_in_aggr_wdf, name, results_dir)
+plot_heatmap.plot_user_heatmap_indegree('UF', UF_in_aggr_wdf, name, results_dir)
 
 
 
@@ -83,42 +79,22 @@ plot_heatmap.plot_heatmap_indegree('UF', UF_in_aggr_wdf, name, results_dir)
 TF_out_aggr_wdf = out_infl_wdf[['actors', 'TF_*', 'TF_TF', 'TF_UF', 'TF_TM', 'TF_UM']]
 TF_out_aggr_wdf = TF_out_aggr_wdf.loc[TF_out_aggr_wdf['TF_*'] !=0]
 TF_out_aggr_wdf = TF_out_aggr_wdf.sort_values(by=['TF_*'], ascending=False).dropna()
-plot_heatmap.plot_heatmap_outdegree('TF', TF_out_aggr_wdf, name, results_dir)
+plot_heatmap.plot_user_heatmap_outdegree('TF', TF_out_aggr_wdf, name, results_dir)
 
 ## Targets/ Incoming ##
 TF_in_aggr_wdf = in_infl_wdf[['actors', '*_TF', 'TF_TF', 'UF_TF', 'TM_TF', 'UM_TF']]
 TF_in_aggr_wdf = TF_in_aggr_wdf.loc[TF_in_aggr_wdf['*_TF'] !=0]
 TF_in_aggr_wdf = TF_in_aggr_wdf.sort_values(by=['*_TF'], ascending=False).dropna()
-plot_heatmap.plot_heatmap_indegree('TF', TF_in_aggr_wdf, name, results_dir)
+plot_heatmap.plot_user_heatmap_indegree('TF', TF_in_aggr_wdf, name, results_dir)
 
 #################################
 ### participation coefficient ###
 #################################
 
-def part_coeff(df, sour_infl):
-    # probably should include actors and go row by row
-    m=4
-    types = ['UF', 'UM', 'TF', 'TM']
-    aggr_type = str(sour_infl + '_*')
-    print(aggr_type)
-    o = df[aggr_type].to_numpy()
-    ptemp = np.zeros_like(o)
-    for i in types:
-        infl_type = str(sour_infl + '_' + i)
-        print(infl_type)
-        k = df[infl_type].to_numpy()
-        #print(np.count_nonzero(o))
-        #ptemp += np.divide(k,o,out=np.zeros_like(k), where=o!=0, dtype=float)**2
-        ptemp += np.divide(k,o)**2
-        #print(ptemp)
-    ptemp[np.isinf(ptemp)] = np.nan
-    p = (4./3.)*(1-ptemp)
-    return p # array of part. coeffs
-
-part_cof_UM = part_coeff(out_infl_wdf, 'UM')
-part_cof_TM = part_coeff(out_infl_wdf, 'TM')
-part_cof_UF = part_coeff(out_infl_wdf, 'UF')
-part_cof_TF = part_coeff(out_infl_wdf, 'TF')
+part_cof_UM = part_coef.part_coef(out_infl_wdf, 'UM')
+part_cof_TM = part_coef.part_coef(out_infl_wdf, 'TM')
+part_cof_UF = part_coef.part_coef(out_infl_wdf, 'UF')
+part_cof_TF = part_coef.part_coef(out_infl_wdf, 'TF')
 
 part_df = pd.DataFrame({'actors': out_infl_wdf['actors'],\
                         'p_UM': part_cof_UM,\
@@ -134,6 +110,7 @@ part_df = part_df[ \
             part_df['p_TF'].notna() \
             ]
 
+part_df.to_csv(f'results/{dataset}_out_part_coef.csv')
 
 part_df.to_csv(f'results/{dataset}_out_part_coef.csv')
 
@@ -161,10 +138,10 @@ def part_coef_in(df, inf, layers):
     return df 
 
 ## Creating Plots for Participant Coefficient of Sources ##
-part_coef_out(UM_out_aggr_wdf,'UM', 4)
-part_coef_out(TM_out_aggr_wdf,'TM', 4)
-part_coef_out(UF_out_aggr_wdf,'UF', 4)
-part_coef_out(TF_out_aggr_wdf,'TF', 4)
+part_coef.part_coef_out(UM_out_aggr_wdf,'UM', 4)
+part_coef.part_coef_out(TM_out_aggr_wdf,'TM', 4)
+part_coef.part_coef_out(UF_out_aggr_wdf,'UF', 4)
+part_coef.part_coef_out(TF_out_aggr_wdf,'TF', 4)
 plt.clf()
 plot_participant_coef.part_coef_plot_out('UM', UM_out_aggr_wdf, name, results_dir)
 plt.clf()
@@ -175,10 +152,10 @@ plt.clf()
 plot_participant_coef.part_coef_plot_out('TF', TF_out_aggr_wdf, name, results_dir)
 
 ## Creating Plots for Participant Coefficient of Targets ##
-part_coef_in(UM_in_aggr_wdf,'UM', 4)
-part_coef_in(TM_in_aggr_wdf,'TM', 4)
-part_coef_in(UF_in_aggr_wdf,'UF', 4)
-part_coef_in(TF_in_aggr_wdf,'TF', 4)
+part_coef.part_coef_in(UM_in_aggr_wdf,'UM', 4)
+part_coef.part_coef_in(TM_in_aggr_wdf,'TM', 4)
+part_coef.part_coef_in(UF_in_aggr_wdf,'UF', 4)
+part_coef.part_coef_in(TF_in_aggr_wdf,'TF', 4)
 plt.clf()
 plot_participant_coef.part_coef_plot_in('UM', UM_in_aggr_wdf, name, results_dir)
 plt.clf()
