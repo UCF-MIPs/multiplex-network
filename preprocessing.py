@@ -1,5 +1,3 @@
-#TODO completely remove 'actors' file, replace with unique 'Source', 'Target' values in TE data
-
 import networkx as nx
 import pandas as pd
 import numpy as np
@@ -27,29 +25,17 @@ skrip_v7_act = 'data/Skripal/v7/indv_network/actors_df.csv'
 ukr_v3_te = 'data/Ukraine/v3/dynamic/actor_te_edges_df_2022_01_01_2022_05_01.csv'
 ukr_v3_act = 'data/Ukraine/v3/dynamic/indv_actors_df.csv'
 
+# TODO bad practice?
 te_df_name = f'{dataset}_te'
-#act_df_name = f'{dataset}_act'
 myvars = locals()
 te_df_path = myvars[te_df_name]
-#act_df_path = myvars[act_df_name]
-
-#actor_df = pd.read_csv(act_df_path)
-#if dataset=='ukr_v3':
-#    actors = dict(zip(actor_df.actor_id, actor_df.user_id)) # For just indv users
-#elif dataset=='skrip_v7':
-#    actors = dict(zip(actor_df.actor_id, actor_df.actor_label)) # For "full_actors" file
 
 # Networks
 graph_dict = {}
 edge_types2 = ['actors'] + edge_types
 
 out_infl_weights_df = pd.DataFrame(columns = edge_types2)
-#out_infl_weights_df['actors'] = actors.values()
-#out_infl_weights_df.fillna(value=0, inplace=True)
-
 in_infl_weights_df = pd.DataFrame(columns = edge_types2)
-#in_infl_weights_df['actors'] = actors.values()
-#in_infl_weights_df.fillna(value=0, inplace=True)
 
 # Pre-process #TODO fix to include chunking method
 graph_df = pd.read_csv(te_df_path)

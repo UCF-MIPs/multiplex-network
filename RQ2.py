@@ -8,23 +8,23 @@ from src import generate_edge_types
 from src import plot_heatmap
 from src import layer_correlation
 
-
 edge_types = generate_edge_types.generate_edge_types()
 edge_types = edge_types + ['TM_*', 'TF_*', 'UM_*', 'UF_*', '*_TM', '*_TF', '*_UM', '*_UF']
 
-dataset = 'ukr_v3' # options: skrip_v7, ukr_v3
+dataset = 'skrip_v7' # options: skrip_v7, ukr_v3
 
 if(dataset=='ukr_v3'):
     name = 'Ukraine'
 if(dataset=='skrip_v7'):
     name = 'Skripal'
 
-datapath = f'results/RQ2_{name}_heatmap_df.csv'
+filename = f'results/RQ2_{name}_heatmap_df'
 results_dir='results'
 
-if os.path.exists(datapath):
+if os.path.exists(f'{filename}.pkl'):
     print("data found, loading...")
-    df_heatmap = pd.read_csv(datapath, index_col=0)
+    #df_heatmap = pd.read_csv(f'{datapath}.csv', index_col=0)
+    df_heatmap = pd.read_pkl(f'{filename}.pkl')
 else:
     print("no data found, generating...")
     
@@ -41,7 +41,8 @@ else:
     for i in edge_types:
         for j in edge_types:
             df_heatmap.at[i, j] = layer_correlation.layer_correlation(TE_df, i, j)
-    df_heatmap.to_csv(f'{results_dir}/RQ2_{name}_heatmap_df.csv')
+    df_heatmap.to_pickle(f'{filename}.pkl')
+    df_heatmap.to_csv(f'{filename}.csv')
 
 # drop columns if they are not an influence type:
 print(df_heatmap)
