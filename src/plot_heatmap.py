@@ -96,6 +96,14 @@ def plot_layer_heatmap(df, name, results_dir):
                     16x16 matrix of influence types
     results_dir:    string of results dir
     '''
-    ax = sns.heatmap(df, linewidth=0.5, vmin=0, vmax=1)
-    plt.tight_layout()
+    new_indecies = ['TM_(TM,UM,TF,UF)', 'TF_(TM,UM,TF,UF)', 'UM_(TM,UM,TF,UF)', 'UF_(TM,UM,TF,UF)']
+    df.set_index([new_indecies], inplace=True)
+    # new_columns = ['TM_(TM,UM,TF,UF)', 'TF_(TM,UM,TF,UF)', 'UM_(TM,UM,TF,UF)', 'UF_(TM,UM,TF,UF)']
+    # df = df.rename(columns = new_columns, inplace=True)
+    ax = sns.heatmap(df, linewidth=0.5, vmin=0, vmax=1, annot=True, fmt='.2f')
+    #plt.tight_layout()
+    ax.set_xlabel('Existence of the same link in the Multiplex of this influence type', fontsize = 8)
+    ax.set_ylabel('Existence of a link in the Multiplex of influence type', fontsize = 8)
+    ax.set_title(f'Probability of Link Existence between Multiplex Network of Influence Types in {name} Dataset', fontsize = 7)
+    ax.set_yticklabels(ax.get_yticklabels(), rotation=90, fontsize = 6)
     plt.savefig(f'{results_dir}/{name}_layer_correlation_heatmap.png')
