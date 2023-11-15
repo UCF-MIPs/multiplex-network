@@ -96,6 +96,8 @@ def plot_layer_heatmap(df, name, results_dir):
                     16x16 matrix of influence types
     results_dir:    string of results dir
     '''
-    ax = sns.heatmap(df, linewidth=0.5, vmin=0, vmax=1)
+    print(df)
+    print(df.dtypes)
+    ax = sns.heatmap(df, linewidth=0.5, vmin=0., vmax=1.)
     plt.tight_layout()
     plt.savefig(f'{results_dir}/{name}_layer_correlation_heatmap.png')
