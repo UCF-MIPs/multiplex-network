@@ -22,7 +22,7 @@ for dataset in dataset_list:
     else:
         te_df_path = f'data/scenarios/{dataset}_actor_te_edges_df.csv'
 
-    datapath = f'results/RQ2_{dataset}_heatmap_df'
+    datapath = f'results/RQ2/{dataset}_heatmap_df'
     results_dir='results/RQ2'
 
     if os.path.exists(f'{datapath}.csv'):
@@ -44,9 +44,6 @@ for dataset in dataset_list:
                 df_heatmap.at[i, j] = layer_correlation.layer_correlation(TE_df, i, j)
         #df_heatmap.to_pickle(f'{datapath}.pkl')
         df_heatmap.to_csv(f'{datapath}.csv')
-
-    # drop any empty rows
-
 
     # drop columns if they are not an influence type:
     print(f'plotting {dataset}')

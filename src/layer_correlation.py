@@ -11,4 +11,8 @@ def layer_correlation(df, source, target):
             sum_of_denominator += 1
         else:
             sum_of_denominator += 0
-    return sum_of_numerator / sum_of_denominator
+    #TODO shouldn't need this condition, check why div by 0 error in RQ2
+    if(sum_of_denominator != 0):
+        return sum_of_numerator / sum_of_denominator
+    else:
+        return 0
