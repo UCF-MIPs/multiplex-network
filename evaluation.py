@@ -1,7 +1,9 @@
 import pandas as pd
 import numpy as np
-from src import cos_sim
 import os
+from matplotlib import pyplot as plt
+
+from src import cos_sim
 
 pd.set_option('display.max_rows', None)
 #pd.set_option('display.max_columns', None)
@@ -68,27 +70,33 @@ mixed_infl = np.array([1.0, 0.5, 0.5, 0.5, \
                            0.5, 0.5, 0.5, 1.0])
 mixed_infl_df = pd.DataFrame(mixed_infl)
 
+distance_df = pd.DataFrame()
+distance_labels = ['similarity_to_noninfl', 'similarity_to_disinfo']
+zero_data = np.zeros(shape=(len(dataset_list), len(distance_labels)))
+dist_df = pd.DataFrame(zero_data, index=dataset_list, columns=distance_labels)
 
+for dataset in dataset_list:
+    print(f'{dataset}')
+    heatdf = heatmap_dfs[dataset]
+    
+    cs1 = cos_sim.cos_sim(heatdf, pure_noninfl_df)
+    print(f'distance from non-influence: {cs1}')
+    dist_df.at[dataset,'similarity_to_noninfl'] = cs1
+    
+    cs2 = cos_sim.cos_sim(heatdf, pure_disinfo_df)
+    dist_df.at[dataset,'similarity_to_disinfo'] = cs2
+    print(f'distance from disinformation: {cs2}')
+    
+    print('\n')
 
-# Run cosine similarity on heatmap dfs across datasets
-skrip_noninfl_dist = cos_sim.cos_sim(skrip_sources, pure_noninfl_df)
-skrip_disinfo_dist = cos_sim.cos_sim(skrip_sources, pure_disinfo_df)
-#skrip_disinfo_dist = cos_sim.cos_sim(skrip_sources, mixed_disinfo_df)
+fig = dist_df.plot.scatter('similarity_to_noninfl','similarity_to_disinfo').get_figure()
+ax2=fig.gca()
+for k,v in dist_df.iterrows():
+    ax2.annotate(k,v)
 
-ukr_noninfl_dist = cos_sim.cos_sim(ukr_sources, pure_noninfl_df)
-ukr_disinfo_dist = cos_sim.cos_sim(ukr_sources, pure_disinfo_df)
-#ukr_disinfo_dist = cos_sim.cos_sim(ukr_sources, mixed_disinfo_df)
+ax2.set_xlabel('Similarity to non-influence matrix')
+ax2.set_ylabel('Similarity to disinformation matrix')
 
+fig.savefig('results/datasets_cos_sim.png')
 
-print('skrip noninfl dist')
-print(skrip_noninfl_dist)
-print('ukr noninfl dist')
-print(ukr_noninfl_dist)
-
-print('skrip disinfo dist')
-print(skrip_disinfo_dist)
-print('ukr disinfo dist')
-print(ukr_disinfo_dist)
-
-
-
+print(dist_df)
