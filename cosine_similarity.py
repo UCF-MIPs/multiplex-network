@@ -42,9 +42,8 @@ TM_cosine_similarity_df.index = dataset_list
 for i,j in enumerate(dataset_list):
     for k,h in enumerate(dataset_list):
         TM_array = combined_dfs['combined_df_TM'].values
-        TM_cosine_similarity_df.at[j,h] = consine_sim(TM_array[i,:], TM_array[k,:])
+        TM_cosine_similarity_df.at[j,h] = consine_sim(TM_array[i,:], TM_array[k,:]).round(3)
 TM_cosine_similarity_df.to_csv('Data/preprocessed/TM_cosine_similarity.csv')
-TM_cosine_similarity_df = TM_cosine_similarity_df.round(2)
 # TM_table = plt.table(cellText=TM_cosine_similarity_df.values, rowLabels=TM_cosine_similarity_df.index,\
 #                       colLabels=TM_cosine_similarity_df.columns, cellloc='center')
 # plt.savefig(f'plots/TM_cosine_similarity_table.png')
@@ -56,7 +55,7 @@ TF_cosine_similarity_df.index = dataset_list
 for i,j in enumerate(dataset_list):
     for k,h in enumerate(dataset_list):
         TF_array = combined_dfs['combined_df_TF'].values
-        TF_cosine_similarity_df.at[j,h] = consine_sim(TF_array[i,:], TF_array[k,:])
+        TF_cosine_similarity_df.at[j,h] = consine_sim(TF_array[i,:], TF_array[k,:]).round(3)
 TF_cosine_similarity_df.to_csv('Data/preprocessed/TF_cosine_similarity.csv')
 # TF_table = plt.table(cellText=TF_cosine_similarity_df.values, rowLabels=TF_cosine_similarity_df.index,\
 #                       colLabels=TF_cosine_similarity_df.columns, loc='center')
@@ -69,7 +68,7 @@ UM_cosine_similarity_df.index = dataset_list
 for i,j in enumerate(dataset_list):
     for k,h in enumerate(dataset_list):
         UM_array = combined_dfs['combined_df_UM'].values
-        UM_cosine_similarity_df.at[j,h] = consine_sim(UM_array[i,:], UM_array[k,:])
+        UM_cosine_similarity_df.at[j,h] = consine_sim(UM_array[i,:], UM_array[k,:]).round(3)
 UM_cosine_similarity_df.to_csv('Data/preprocessed/UM_cosine_similarity.csv')
 # UM_table = plt.table(cellText=UM_cosine_similarity_df.values, rowLabels=UM_cosine_similarity_df.index,\
 #                       colLabels=UM_cosine_similarity_df.columns, loc='center')
@@ -82,7 +81,7 @@ UF_cosine_similarity_df.index = dataset_list
 for i,j in enumerate(dataset_list):
     for k,h in enumerate(dataset_list):
         UF_array = combined_dfs['combined_df_UF'].values
-        UF_cosine_similarity_df.at[j,h] = consine_sim(UF_array[i,:], UF_array[k,:])
+        UF_cosine_similarity_df.at[j,h] = consine_sim(UF_array[i,:], UF_array[k,:]).round(3)
 UF_cosine_similarity_df.to_csv('Data/preprocessed/UF_cosine_similarity.csv')
 # UF_table = plt.table(cellText=UF_cosine_similarity_df.values, rowLabels=UF_cosine_similarity_df.index,\
 #                       colLabels=UF_cosine_similarity_df.columns, loc='center')
