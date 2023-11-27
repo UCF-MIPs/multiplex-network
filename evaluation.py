@@ -38,7 +38,7 @@ print(ukr_sources)
 #TODO
 
 #test cos_sim value by comparing two datasets, then each one seperately against artificial baseline
-cs = cos_sim.cos_sim(skrip_sources, ukr_sources)
+cs = cos_sim.cos_sim_df(skrip_sources, ukr_sources)
 print(cs)
 
 
@@ -79,11 +79,11 @@ for dataset in dataset_list:
     print(f'{dataset}')
     heatdf = heatmap_dfs[dataset]
     
-    cs1 = cos_sim.cos_sim(heatdf, pure_noninfl_df)
+    cs1 = cos_sim.cos_sim_df(heatdf, pure_noninfl_df)
     print(f'distance from non-influence: {cs1}')
     dist_df.at[dataset,'similarity_to_noninfl'] = cs1
     
-    cs2 = cos_sim.cos_sim(heatdf, pure_disinfo_df)
+    cs2 = cos_sim.cos_sim_df(heatdf, pure_disinfo_df)
     dist_df.at[dataset,'similarity_to_disinfo'] = cs2
     print(f'distance from disinformation: {cs2}')
     
@@ -99,4 +99,5 @@ ax2.set_ylabel('Similarity to disinformation matrix')
 
 fig.savefig('results/datasets_cos_sim.png')
 
+#TODO figure out if this is a decent representation, the heatmap matrix we're comparing against is conditional probability of links existing in one infl type given another, maybe it's more like "coordinated influence/disinfo" or something like that
 print(dist_df)
