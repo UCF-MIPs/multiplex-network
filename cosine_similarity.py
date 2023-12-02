@@ -13,7 +13,7 @@ dataset_list = ['Skripal', 'Ukraine', 'Anniversary', 'Biden', 'Bucha_crimes','cr
                 'Mariupol_hospital','Mariupol_theater','Putin_warrant','Russia_mobilize','Russian_missle_cross_Poland',
                 'tanks','Zelensky_visit_the_US']
 dataframes = {}
-for dataset in dataset_list:
+for dataset in dataset_list: 
     df_name = f'df_{dataset}'
     df_path = f'Data/preprocessed/{dataset}/{dataset}_quadrant_preprocessing_sources.csv'
     dataframes[df_name] = pd.read_csv(df_path, index_col=0)

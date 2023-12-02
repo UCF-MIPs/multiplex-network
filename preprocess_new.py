@@ -8,7 +8,7 @@ pd.set_option('display.max_rows', None)
 pd.set_option('display.max_columns', None)
 
 edge_types = generate_edge_types.generate_edge_types()
-edge_types = edge_types + ['TM_*', 'TF_*', 'UM_*', 'UF_*', '*_TM', '*_TF', '*_UM', '*_UF']
+edge_types = edge_types + ['T_T', 'U_U', 'T_U', 'U_T', 'TM_*', 'TF_*', 'UM_*', 'UF_*', 'T_*', 'U_*']
 
 dataset_list = ['Skripal', 'Ukraine', 'Anniversary', 'Biden', 'Bucha_crimes','crimes_un_report','Khersion_retreat',
                 'Mariupol_hospital','Mariupol_theater','Putin_warrant','Russia_mobilize','Russian_missle_cross_Poland',
@@ -33,13 +33,11 @@ for dataset in dataset_list:
     edge_types2 = ['actors'] + edge_types
 
     out_infl_weights_df = pd.DataFrame(columns = edge_types2)
-    in_infl_weights_df = pd.DataFrame(columns = edge_types2)
 
-    # Pre-process #TODO fix to include chunking method
+    # Pre-process
     graph_df = pd.read_csv(te_df_path)
     actors = pd.unique(graph_df[['Source', 'Target']].values.ravel('K'))
     out_infl_weights_df['actors'] = actors
-    in_infl_weights_df['actors'] = actors
 
     # Check number of unique users
     num_us = len(pd.unique(graph_df[['Source', 'Target']].values.ravel('K')))
@@ -69,18 +67,5 @@ for dataset in dataset_list:
                 row_index = out_infl_weights_df.index[out_infl_weights_df['actors']==node].to_list()
                 out_infl_weights_df.loc[row_index, [edge_type]]=summed_weight
 
-            ## in weight df filling
-            if g.has_node(node):
-                in_edges = g.in_edges(node, data=True)
-                summed_weight = 0
-                for edge_data in in_edges:
-                    #iconvert 'dict_items' dtype to float
-                    for k, v in edge_data[2].items():
-                        w = float(v)
-                    summed_weight += w
-                row_index = in_infl_weights_df.index[in_infl_weights_df['actors']==node].to_list()
-                in_infl_weights_df.loc[row_index, [edge_type]]=summed_weight
-
     out_infl_weights_df.to_csv(f'Data/preprocessed/{dataset}/{dataset}_out_infl_weights_df.csv')
-    in_infl_weights_df.to_csv(f'Data/preprocessed/{dataset}/{dataset}_in_infl_weights_df.csv')
 

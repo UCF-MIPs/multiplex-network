@@ -7,3 +7,4 @@ plots/*
 src/*.swp
 .DS_store
 *.ipynb
+RQ1_new_subplots.py

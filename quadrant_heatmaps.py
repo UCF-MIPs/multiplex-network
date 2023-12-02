@@ -13,9 +13,3 @@ for dataset in dataset_list:
     df_heatmap_source = pd.read_csv(df_source_path, index_col=0)
     plot_heatmap.plot_layer_heatmap(df_heatmap_source, dataset, f'plots/{dataset}/Sources')
     plt.clf()
-
-# for dataset in dataset_list:
-#     df_target_path = f'Data/preprocessed/{dataset}/{dataset}_quadrant_preprocessing_targets.csv'
-#     df_heatmap_target = pd.read_csv(df_target_path, index_col=0)
-#     plot_heatmap.plot_layer_heatmap(df_heatmap_target, dataset, f'plots/{dataset}/Targets')
-#     plt.clf()
