@@ -20,12 +20,12 @@ for dataset in dataset_list:
         else:
             df = pd.read_csv(f'Data/raw/Scenarios/{dataset}_actor_te_edges_df.csv')
         aggregated_df = add_aggregate_networks.add_aggr_nets(df)
-        aggregated_df.to_csv(f'Data/preprocessed/{dataset}/{dataset}_quadrant_preprocessing.csv')
+        aggregated_df.to_csv(datapath)
 
-### Quadrant crossover when nodes act as sources ###
+### Quadrant crossover when nodes act as sources (4 layers) ###
 for dataset in dataset_list:
-    datapath = f'Data/preprocessed/{dataset}/{dataset}_quadrant_preprocessing_sources.csv'
-    if os.path.exists(datapath):
+    datapath_4layers = f'Data/preprocessed/{dataset}/{dataset}_quadrant_preprocessing_sources_4layers.csv'
+    if os.path.exists(datapath_4layers):
         print("data has been found")
     else:
         print("data has not been found, generating ...")
@@ -36,20 +36,52 @@ for dataset in dataset_list:
         for i in multiplex_source:
             for j in multiplex_source:
                 df_heatmap.at[i, j] = layer_correlation.layer_correlation(TE_df, i, j)
-        df_heatmap.to_csv(f'Data/preprocessed/{dataset}/{dataset}_quadrant_preprocessing_sources.csv')
+        df_heatmap.to_csv(datapath_4layers)
 
-### Quadrant crossover when nodes act as targets ###
+### Quadrant crossover when nodes act as sources (2 layers) ###
 for dataset in dataset_list:
-    datapath = f'Data/preprocessed/{dataset}/{dataset}_quadrant_preprocessing_targets.csv'
-    if os.path.exists(datapath):
+    datapath_2layers = f'Data/preprocessed/{dataset}/{dataset}_quadrant_preprocessing_sources_2layers.csv'
+    if os.path.exists(datapath_2layers):
         print("data has been found")
     else:
         print("data has not been found, generating ...")
         TE_df = pd.read_csv(f'Data/preprocessed/{dataset}/{dataset}_quadrant_preprocessing.csv')
-        multiplex_target = ['*_TM', '*_TF', '*_UM', '*_UF']
-        df_heatmap = pd.DataFrame(index= range(4), columns = multiplex_target)
-        df_heatmap.index = multiplex_target
-        for i in multiplex_target:
-            for j in multiplex_target:
+        multiplex_source = ['T_*', 'U_*']
+        df_heatmap = pd.DataFrame(index= range(2), columns = multiplex_source)
+        df_heatmap.index = multiplex_source
+        for i in multiplex_source:
+            for j in multiplex_source:
                 df_heatmap.at[i, j] = layer_correlation.layer_correlation(TE_df, i, j)
-        df_heatmap.to_csv(f'Data/preprocessed/{dataset}/{dataset}_quadrant_preprocessing_targets.csv')
+        df_heatmap.to_csv(datapath_2layers)
+
+### Weighted Quadrant crossover when nodes act as sources (4 layers) ###
+for dataset in dataset_list:
+    datapath_4layers_weighted = f'Data/preprocessed/{dataset}/{dataset}_quadrant_preprocessing_sources_4layers_weighted.csv'
+    if os.path.exists(datapath_4layers_weighted):
+        print("data has been found")
+    else:
+        print("data has not been found, generating ...")
+        TE_df = pd.read_csv(f'Data/preprocessed/{dataset}/{dataset}_quadrant_preprocessing.csv')
+        multiplex_source = ['TM_*', 'TF_*', 'UM_*', 'UF_*']
+        df_heatmap = pd.DataFrame(index= range(4), columns = multiplex_source)
+        df_heatmap.index = multiplex_source
+        for i in multiplex_source:
+            for j in multiplex_source:
+                df_heatmap.at[i, j] = layer_correlation.weighted_layer_correlation(TE_df, i, j)
+        df_heatmap.to_csv(datapath_4layers_weighted)
+
+### Weighted Quadrant crossover when nodes act as sources (2 layers) ###
+for dataset in dataset_list:
+    datapath_2layers_weighted = f'Data/preprocessed/{dataset}/{dataset}_quadrant_preprocessing_sources_2layers_weighted.csv'
+    if os.path.exists(datapath_2layers_weighted):
+        print("data has been found")
+    else:
+        print("data has not been found, generating ...")
+        TE_df = pd.read_csv(f'Data/preprocessed/{dataset}/{dataset}_quadrant_preprocessing.csv')
+        multiplex_source = ['T_*', 'U_*']
+        df_heatmap = pd.DataFrame(index= range(2), columns = multiplex_source)
+        df_heatmap.index = multiplex_source
+        for i in multiplex_source:
+            for j in multiplex_source:
+                df_heatmap.at[i, j] = layer_correlation.weighted_layer_correlation(TE_df, i, j)
+        df_heatmap.to_csv(datapath_2layers_weighted)

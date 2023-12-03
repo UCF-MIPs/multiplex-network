@@ -35,7 +35,6 @@ def plot_user_heatmap_outdegree_4layers(inf, df, name, results_dir, map_color):
     ax.set_yticks(range(5))
     labels = df.columns
     ax.set_yticklabels(labels, rotation = 45, fontsize = 20)
-    #ax.set_yticklabels(labels, fontsize = 10)
     ax.set_xticklabels(ax.get_xticklabels(), fontsize = 15)
     ax.set_xlabel('Rank of actors', fontsize = 20)
     ax.set_title(f'{name} {inf} source actors outgoing influence', fontsize = 20)
@@ -76,7 +75,6 @@ def plot_user_heatmap_outdegree_2layers(inf, df, name, results_dir, map_color):
     ax.set_yticks(range(3))
     labels = df.columns
     ax.set_yticklabels(labels, rotation = 45, fontsize = 20)
-    #ax.set_yticklabels(labels, fontsize = 10)
     ax.set_xticklabels(ax.get_xticklabels(), fontsize = 15)
     ax.set_xlabel('Rank of actors', fontsize = 20)
     if inf == 'T':
@@ -125,21 +123,46 @@ def plot_user_heatmap_datasets_comparison(inf, df, results_dir, map_color):
 
 # creating plots for the same targets
 
-def plot_layer_heatmap(df, name, results_dir):
-    '''
-    df:             dataframe of correlation between layers
-                    16x16 matrix of influence types
-    results_dir:    string of results dir
-    '''
+def plot_layer_heatmap_4layers(df, name, dic, results_dir):
     new_indecies = ['TM_(TM,UM,TF,UF)', 'TF_(TM,UM,TF,UF)', 'UM_(TM,UM,TF,UF)', 'UF_(TM,UM,TF,UF)']
     df.set_index([new_indecies], inplace=True)
     new_columns = {'TM_*':'TM_(TM,UM,TF,UF)', 'TF_*':'TF_(TM,UM,TF,UF)', 'UM_*':'UM_(TM,UM,TF,UF)', 'UF_*':'UF_(TM,UM,TF,UF)'}
     df.rename(columns = new_columns, inplace=True)
     ax = sns.heatmap(df, linewidth=0.5, vmin=0, vmax=1, annot=True, fmt='.2f')
-    #plt.tight_layout()
-    #ax.set_xlabel('Existence of the same link in the Multiplex of this influence type', fontsize = 8)
-    #ax.set_ylabel('Existence of a link in the Multiplex of influence type', fontsize = 8)
-    ax.set_title(f'Links between Influence Types in {name} Dataset', fontsize = 10)
+    ax.set_title(f'Pairwise Link Presense between Influence Types in {dic[name]} Dataset', fontsize = 8)
     ax.set_xticklabels(ax.get_xticklabels(), rotation=0, fontsize = 6)
     ax.set_yticklabels(ax.get_yticklabels(), rotation=90, fontsize = 6)
-    plt.savefig(f'{results_dir}/{name}_layer_correlation_heatmap.png')
+    plt.savefig(f'{results_dir}/{name}_layer_correlation_heatmap_4layers.png')
+
+def plot_layer_heatmap_4layers_weighted(df, name, dic, results_dir):
+    new_indecies = ['TM_(TM,UM,TF,UF)', 'TF_(TM,UM,TF,UF)', 'UM_(TM,UM,TF,UF)', 'UF_(TM,UM,TF,UF)']
+    df.set_index([new_indecies], inplace=True)
+    new_columns = {'TM_*':'TM_(TM,UM,TF,UF)', 'TF_*':'TF_(TM,UM,TF,UF)', 'UM_*':'UM_(TM,UM,TF,UF)', 'UF_*':'UF_(TM,UM,TF,UF)'}
+    df.rename(columns = new_columns, inplace=True)
+    ax = sns.heatmap(df, linewidth=0.5, vmin=0, vmax=1, annot=True, fmt='.2f')
+    ax.set_title(f'Pairwise Weighted Link Presence between Influence Types in {dic[name]} Dataset', fontsize = 8)
+    ax.set_xticklabels(ax.get_xticklabels(), rotation=0, fontsize = 6)
+    ax.set_yticklabels(ax.get_yticklabels(), rotation=90, fontsize = 6)
+    plt.savefig(f'{results_dir}/{name}_layer_correlation_heatmap_4layers_weighted.png')
+
+def plot_layer_heatmap_2layers(df, name, dic, results_dir):
+    new_indecies = ['T_(T,U)', 'U_(T,U)']
+    df.set_index([new_indecies], inplace=True)
+    new_columns = {'T_*':'T_(T,U)', 'U_*':'U_(T,U)'}
+    df.rename(columns = new_columns, inplace=True)
+    ax = sns.heatmap(df, linewidth=0.5, vmin=0, vmax=1, annot=True, fmt='.2f')
+    ax.set_title(f'Pairwise Link Presense between Influence Types in {dic[name]} Dataset', fontsize = 8)
+    ax.set_xticklabels(ax.get_xticklabels(), rotation=0, fontsize = 6)
+    ax.set_yticklabels(ax.get_yticklabels(), rotation=90, fontsize = 6)
+    plt.savefig(f'{results_dir}/{name}_layer_correlation_heatmap_2layers.png')
+
+def plot_layer_heatmap_2layers_weighted(df, name, dic, results_dir):
+    new_indecies = ['T_(T,U)', 'U_(T,U)']
+    df.set_index([new_indecies], inplace=True)
+    new_columns = {'T_*':'T_(T,U)', 'U_*':'U_(T,U)'}
+    df.rename(columns = new_columns, inplace=True)
+    ax = sns.heatmap(df, linewidth=0.5, vmin=0, vmax=1, annot=True, fmt='.2f')
+    ax.set_title(f'Pairwise Weighted Link Presence between Influence Types in {dic[name]} Dataset', fontsize = 8)
+    ax.set_xticklabels(ax.get_xticklabels(), rotation=0, fontsize = 6)
+    ax.set_yticklabels(ax.get_yticklabels(), rotation=90, fontsize = 6)
+    plt.savefig(f'{results_dir}/{name}_layer_correlation_heatmap_2layers_weighted.png')
