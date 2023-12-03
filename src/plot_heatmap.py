@@ -89,7 +89,39 @@ def plot_user_heatmap_outdegree_2layers(inf, df, name, results_dir, map_color):
     ax.set_aspect('auto')
     plt.savefig(f'{results_dir}/{name}_{inf}_out_activity.png')
 
+######################################################
+### creating plots for the Accumulated Dataframes ###
+######################################################
+def plot_user_heatmap_datasets_comparison(inf, df, results_dir, map_color):
+    '''
+    inf:            source influence type
+    df:             dataframe, ex// TM_out_aggr_wdf, or
+                    "Trustworthy-Mainstream out edge aggregated weight dataframe"
+    results_dir:    string of results dir
+    '''
+    # Data
+    heatmap = np.empty((14, len(df['Skripal'])))
+    for i, (column_name, column_data) in enumerate(df.items()):
+        heatmap[i] = column_data
 
+    # Plotting
+    fig = plt.figure(figsize=(20,20))
+    ax = fig.add_subplot(111)
+    im = ax.imshow(heatmap, interpolation='nearest', vmax=df.values.max(), cmap=f'{map_color}')
+    ax.set_yticks(range(14))
+    labels = df.columns
+    ax.set_yticklabels(labels, rotation = 45, fontsize = 20)
+    ax.set_xticklabels(ax.get_xticklabels(), fontsize = 15)
+    ax.set_xlabel('Rank of actors', fontsize = 20)
+    if inf == 'T':
+        ax.set_title(f'Trustworthy source actors influence over datasets', fontsize = 20)
+    elif inf == 'U':
+        ax.set_title(f'Untrustworthy source actors influence over datasets', fontsize = 20)
+    cbar = fig.colorbar(ax=ax, mappable=im, orientation = 'horizontal')
+    cbar.ax.tick_params(labelsize=15)
+    cbar.set_label('Transfer Entropy', fontsize = 20)
+    ax.set_aspect('auto')
+    plt.savefig(f'{results_dir}/{inf}_sources_datasets_comparison.png')
 
 # creating plots for the same targets
 
