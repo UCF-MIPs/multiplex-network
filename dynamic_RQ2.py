@@ -20,15 +20,25 @@ edge_types = generate_edge_types.generate_edge_types()
 edge_types = edge_types + ['TM_*', 'TF_*', 'UM_*', 'UF_*', '*_TM', '*_TF', '*_UM', '*_UF']
 edge_types.remove('total_te')
 
-dataset_list = ['Mariupol_hospital']
+dataset_list = [ 'Ukraine']
 #dataset_list = ['Skripal', 'Ukraine', 'Anniversary', 'Biden', 'Bucha_crimes','crimes_un_report','Khersion_retreat','Mariupol_hospital','Mariupol_theater','Putin_warrant','Russia_mobilize','Russian_missle_cross_Poland','tanks','Zelensky_visit_the_US']
 
 
-# template matrices
-pure_disinfo = np.array([1.0, 0.0, 0.0, 0.0, \
-                           0.0, 1.0, 0.0, 0.0, \
-                           1.0, 1.0, 1.0, 0.0, \
-                           1.0, 1.0, 0.0, 1.0])
+# template matrices 
+#    TM TF UM UF
+# TM
+# TF
+# UM
+# UF
+pure_disinfo = np.array([0.0, 0.0, 1.0, 1.0, \
+                           0.0, 0.0, 1.0, 1.0, \
+                           0.0, 0.0, 0.0, 1.0, \
+                           0.0, 0.0, 1.0, 0.0])
+
+pure_infl = np.array([0.0, 1.0, 1.0, 1.0, \
+                           1.0, 0.0, 1.0, 1.0, \
+                           1.0, 1.0, 0.0, 1.0, \
+                           1.0, 1.0, 1.0, 0.0])
 
 for dataset in dataset_list: 
  
@@ -38,18 +48,19 @@ for dataset in dataset_list:
     #elif dataset == 'Ukraine':
         #...
     #else:
-    csvs = glob.glob(f'data/dynamic/Mariupol_hospital/*.csv')   
+    print("a")
+    csvs = glob.glob(f'data/dynamic/{dataset}/*.csv')   
     
     #Resulting array
     shape = (len(csvs),4,4) # time, 2d array
     heatmaps = np.zeros(shape)
     sim_to_disinfl = np.zeros(len(csvs)) # 1d comparison of TE to disinfluence template
+    sim_to_pureinfl = np.zeros(len(csvs)) # 1d comparison of TE to disinfluence template
 
     for t, csvfile in enumerate(csvs):
         name = csvfile.replace(str('data/dynamic/'+dataset + "/actor_te_edges_df"), dataset)
         name = name.replace('.csv', '_preprocessed')
-        datapath = f'results/dynamic/Scenarios/{dataset}/'
-        
+        datapath = f'results/dynamic/{dataset}/'
         ### PREPROCESSING ###
         if os.path.exists(f'{datapath}{name}.csv'):
             print(f"{dataset} preprocessed data found, loading...")
@@ -72,14 +83,12 @@ for dataset in dataset_list:
             in_infl_weights_df['actors'] = actors
 
             graph_df = add_aggregate_networks.add_aggr_nets(graph_df)
-
             for edge_type in edge_types:
                 graph_dict[edge_type] = {}
                 g = nx.from_pandas_edgelist(graph_df, source='Source', target='Target', edge_attr=[edge_type], create_using=nx.DiGraph())
                 #nx.relabel_nodes(g, actors, copy=False)
 
                 graph_dict[edge_type] = g
-
                 # identify which influence types nodes appear in, save summed weights
                 for node in actors:
 
@@ -96,14 +105,15 @@ for dataset in dataset_list:
                         out_infl_weights_df.loc[row_index, [edge_type]]=summed_weight
 
             out_infl_weights_df.to_csv(f'{datapath}{name}.csv')
-     
+    
+        '''
         ### 16x16 TE HEATMAPS ###
         name = csvfile.replace(str('data/dynamic/'+dataset + "/actor_te_edges_df"), dataset)
         name = name.replace('.csv', '_heatmap_df')
 
-        if os.path.exists(f'{datapath}{name}.csv'):
+        if os.path.exists(f'{datapath}{name}16.csv'):
             print(f"{dataset} heatmap data found, loading...")
-            df_heatmap = pd.read_csv(f'{datapath}{name}.csv', index_col=0)
+            df_heatmap = pd.read_csv(f'{datapath}{name}16.csv', index_col=0)
             #df_heatmap = pd.read_pkl(f'{filename}.pkl')
         else:
             print(f"no heatmap data found for {dataset}, generating...") 
@@ -119,34 +129,41 @@ for dataset in dataset_list:
                 for j in edge_types:
                     df_heatmap.at[i, j] = layer_correlation.layer_correlation(TE_df, i, j)
             #df_heatmap.to_pickle(f'{datapath}.pkl')
-            df_heatmap.to_csv(f'{datapath}{name}.csv')
+            df_heatmap.to_csv(f'{datapath}{name}16.csv')
 
+        '''
         ### 4x4 TE HEATMAPS ###
-        #if os.path.exists(f'{datapath}dynamic_heatmaps.npy'):
-        #    pass
-        #else:
-        df = pd.read_csv(csvfile)
-        TE_df = add_aggregate_networks.add_aggr_nets(df)
-        multiplex_source = ['TM_*', 'TF_*', 'UM_*', 'UF_*']
-        df_heatmap = pd.DataFrame(index= range(4), columns = multiplex_source)
-        df_heatmap.index = multiplex_source
-        for i in multiplex_source:
-            for j in multiplex_source:
-                df_heatmap.at[i, j] = layer_correlation.layer_correlation(TE_df, i, j)
-        heatmaps[t]=df_heatmap.to_numpy()
-        sim_to_disinfl[t] = cos_sim.cos_sim(pure_disinfo, heatmaps[t])
+        #TODO don't need to check/load at every timestep
+        if os.path.exists(f'{datapath}{name}4.npy'):
+            heatmaps = np.load(f'{datapath}{name}4.npy') 
+        else:
+            df = pd.read_csv(csvfile)
+            TE_df = add_aggregate_networks.add_aggr_nets(df)
+            multiplex_source = ['TM_*', 'TF_*', 'UM_*', 'UF_*']
+            df_heatmap = pd.DataFrame(index= range(4), columns = multiplex_source)
+            df_heatmap.index = multiplex_source
+            for i in multiplex_source:
+                for j in multiplex_source:
+                    df_heatmap.at[i, j] = layer_correlation.layer_correlation(TE_df, i, j)
+            heatmaps[t]=df_heatmap.to_numpy()
+            sim_to_disinfl[t] = cos_sim.cos_sim(pure_disinfo, heatmaps[t])
+            sim_to_pureinfl[t] = cos_sim.cos_sim(pure_infl, heatmaps[t])
         print(f'{heatmaps[t]}')
         print(f' cosine similarity to disinfo at time {t}: {sim_to_disinfl[t]}')
     # visuals
-    np.save(f'{datapath}dynamic_heatmaps.npy', heatmaps)
-    time = np.arange(13)
+    np.save(f'{datapath}{name}4.npy', heatmaps)
+    time = np.arange(len(csvs))
     print(time)
     print(sim_to_disinfl)
-    print(np.size(time), np.size(sim_to_disinfl))
+    #print(np.size(time), np.size(sim_to_disinfl))
     plt.scatter(time, sim_to_disinfl)
+    plt.plot(time, sim_to_disinfl, label='to disinfluence')
+    plt.scatter(time, sim_to_pureinfl)
+    plt.plot(time, sim_to_pureinfl, label='to influence')
     plt.title(f'{dataset} disinfluence indicator')
-    plt.xlabel('time (3days)')
-    plt.ylabel('cos similarity to disinfluence template')
+    plt.xlabel('time (4days)')
+    plt.ylabel('cos similarity to templates')
+    plt.legend()
     plt.savefig(f'{datapath}dynamic.png')
     plt.clf()
 
