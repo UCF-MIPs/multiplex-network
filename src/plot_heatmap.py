@@ -7,7 +7,7 @@ import seaborn as sns
 ### creating plots for the same sources (4 Layers) ###
 ######################################################
 
-def plot_user_heatmap_outdegree_4layers(inf, df, name, results_dir, map_color):
+def plot_user_heatmap_outdegree_4layers(inf, df, name, dic, results_dir, map_color):
     '''
     inf:            source influence type
     df:             dataframe, ex// TM_out_aggr_wdf, or
@@ -25,29 +25,31 @@ def plot_user_heatmap_outdegree_4layers(inf, df, name, results_dir, map_color):
         heatmap[i] = column_data
 
     # renaming the first label in y-axis
-    df = df.rename(columns={aggr_type:f'{inf}_(TM,UM,TF,UF)'})
+    df = df.rename(columns={f'{inf}_TM':f'{inf} -> TM', f'{inf}_UM':f'{inf} -> UM',f'{inf}_TF':f'{inf} -> TF',
+                            f'{inf}_UF':f'{inf} -> UF', aggr_type:f'{inf} -> * *'})
     cbar_column = f'{inf}_(TM,UM,TF,UF)'
 
     # Plotting
     fig = plt.figure(figsize=(20,20))
     ax = fig.add_subplot(111)
-    im = ax.imshow(heatmap, interpolation='nearest', vmax=df[cbar_column].max(), cmap=f'{map_color}')
+    im = ax.imshow(heatmap, interpolation='nearest', vmin= 0, vmax=20, cmap=f'{map_color}')
+    #im = ax.imshow(heatmap, interpolation='nearest', vmax=df[f'{inf} --> * *'].max(), cmap=f'{map_color}')
     ax.set_yticks(range(5))
     labels = df.columns
-    ax.set_yticklabels(labels, rotation = 45, fontsize = 20)
-    ax.set_xticklabels(ax.get_xticklabels(), fontsize = 15)
-    ax.set_xlabel('Rank of actors', fontsize = 20)
-    ax.set_title(f'{name} {inf} source actors outgoing influence', fontsize = 20)
+    ax.set_yticklabels(labels, rotation = 45, fontsize = 40)
+    ax.set_xticklabels(ax.get_xticklabels(), fontsize = 35)
+    ax.set_xlabel('Sorted actors according to the strength of influence', fontsize = 40)
+    ax.set_title(f'{dic[name]} {inf} source actors influence', fontsize = 40)
     cbar = fig.colorbar(ax=ax, mappable=im, orientation = 'horizontal')
-    cbar.ax.tick_params(labelsize=15)
-    cbar.set_label('Transfer Entropy', fontsize = 20)
+    cbar.ax.tick_params(labelsize=35)
+    cbar.set_label('Transfer Entropy', fontsize = 40)
     ax.set_aspect('auto')
     plt.savefig(f'{results_dir}/{name}_{inf}_out_activity.png')
 
 ######################################################
 ### creating plots for the same sources (2 Layers) ###
 ######################################################
-def plot_user_heatmap_outdegree_2layers(inf, df, name, results_dir, map_color):
+def plot_user_heatmap_outdegree_2layers(inf, df, name, dic, results_dir, map_color):
     '''
     inf:            source influence type
     df:             dataframe, ex// TM_out_aggr_wdf, or
@@ -65,24 +67,25 @@ def plot_user_heatmap_outdegree_2layers(inf, df, name, results_dir, map_color):
         heatmap[i] = column_data
 
     # renaming the first label in y-axis
-    df = df.rename(columns={aggr_type:f'{inf}_(T,U)'})
+    df = df.rename(columns={f'{inf}_T':f'{inf} * -> T *', f'{inf}_U':f'{inf} * -> U *', aggr_type:f'{inf} * -> * *'})
     cbar_column = f'{inf}_(T,U)'
 
     # Plotting
     fig = plt.figure(figsize=(20,20))
     ax = fig.add_subplot(111)
-    im = ax.imshow(heatmap, interpolation='nearest', vmax=df[cbar_column].max(), cmap=f'{map_color}')
+    im = ax.imshow(heatmap, interpolation='nearest', vmin=0, vmax=20, cmap=f'{map_color}')
+    #im = ax.imshow(heatmap, interpolation='nearest', vmax=df[f'{inf} * --> * *'].max(), cmap=f'{map_color}')
     ax.set_yticks(range(3))
     labels = df.columns
-    ax.set_yticklabels(labels, rotation = 45, fontsize = 20)
-    ax.set_xticklabels(ax.get_xticklabels(), fontsize = 15)
-    ax.set_xlabel('Rank of actors', fontsize = 20)
+    ax.set_yticklabels(labels, rotation = 45, fontsize = 40)
+    ax.set_xticklabels(ax.get_xticklabels(), fontsize = 35)
+    ax.set_xlabel('Sorted actors according to the strength of influence', fontsize = 40)
     if inf == 'T':
-        ax.set_title(f'{name} Trustworthy source actors outgoing influence', fontsize = 20)
+        ax.set_title(f'{dic[name]} Trustworthy source actors influence', fontsize = 40)
     elif inf == 'U':
-        ax.set_title(f'{name} Untrustworthy source actors outgoing influence', fontsize = 20)
+        ax.set_title(f'{dic[name]} Untrustworthy source actors influence', fontsize = 40)
     cbar = fig.colorbar(ax=ax, mappable=im, orientation = 'horizontal')
-    cbar.ax.tick_params(labelsize=15)
+    cbar.ax.tick_params(labelsize=35)
     cbar.set_label('Transfer Entropy', fontsize = 20)
     ax.set_aspect('auto')
     plt.savefig(f'{results_dir}/{name}_{inf}_out_activity.png')
@@ -98,26 +101,28 @@ def plot_user_heatmap_datasets_comparison(inf, df, results_dir, map_color):
     results_dir:    string of results dir
     '''
     # Data
-    heatmap = np.empty((14, len(df['Skripal'])))
+    heatmap = np.empty((2, len(df['Skripal'])))
     for i, (column_name, column_data) in enumerate(df.items()):
         heatmap[i] = column_data
 
     # Plotting
     fig = plt.figure(figsize=(20,20))
     ax = fig.add_subplot(111)
-    im = ax.imshow(heatmap, interpolation='nearest', vmax=df.values.max(), cmap=f'{map_color}')
-    ax.set_yticks(range(14))
+    im = ax.imshow(heatmap, interpolation='nearest', vmin= 0, vmax=20, cmap=f'{map_color}')
+    ax.set_yticks(range(2))
     labels = df.columns
-    ax.set_yticklabels(labels, rotation = 45, fontsize = 20)
-    ax.set_xticklabels(ax.get_xticklabels(), fontsize = 15)
-    ax.set_xlabel('Rank of actors', fontsize = 20)
+    ax.set_yticklabels(labels, rotation = 45, fontsize = 40)
+    ax.set_xticklabels(ax.get_xticklabels(), fontsize = 35)
+    ax.set_xlabel('Sorted actors according to the strength of influence', fontsize = 40)
     if inf == 'T':
-        ax.set_title(f'Trustworthy source actors influence over datasets', fontsize = 20)
+        ax.set_title(f'Trustworthy source actors influence over datasets', fontsize = 40)
     elif inf == 'U':
-        ax.set_title(f'Untrustworthy source actors influence over datasets', fontsize = 20)
+        ax.set_title(f'Untrustworthy source actors influence over datasets', fontsize = 40)
+    elif inf in ['TM', 'TF', 'UM', 'UF']:
+        ax.set_title(f'{inf} source actors influence over datasets', fontsize = 40)
     cbar = fig.colorbar(ax=ax, mappable=im, orientation = 'horizontal')
-    cbar.ax.tick_params(labelsize=15)
-    cbar.set_label('Transfer Entropy', fontsize = 20)
+    cbar.ax.tick_params(labelsize=35)
+    cbar.set_label('Transfer Entropy', fontsize = 30)
     ax.set_aspect('auto')
     plt.savefig(f'{results_dir}/{inf}_sources_datasets_comparison.png')
 
