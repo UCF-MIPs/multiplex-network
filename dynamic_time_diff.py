@@ -20,8 +20,8 @@ edge_types = generate_edge_types.generate_edge_types()
 edge_types = edge_types + ['TM_*', 'TF_*', 'UM_*', 'UF_*', '*_TM', '*_TF', '*_UM', '*_UF']
 edge_types.remove('total_te')
 
-#dataset_list = [ 'Ukraine']
-dataset_list = ['Anniversary', 'Biden', 'Bucha_crimes','crimes_un_report','Khersion_retreat','Mariupol_hospital','Mariupol_theater','Putin_warrant','Russia_mobilize','Russian_missile_cross_Poland','tanks', 'Ukraine', 'Zelensky_visit_the_US']
+dataset_list = [ 'Ukraine']
+#dataset_list = ['Anniversary', 'Biden', 'Bucha_crimes','crimes_un_report','Khersion_retreat','Mariupol_hospital','Mariupol_theater','Putin_warrant','Russia_mobilize','Russian_missle_cross_Poland','tanks','Zelensky_visit_the_US']
 #dataset_list = ['Khersion_retreat','Mariupol_hospital','Mariupol_theater','Putin_warrant','Russia_mobilize','Russian_missle_cross_Poland','tanks','Zelensky_visit_the_US']
 
 
@@ -43,12 +43,6 @@ pure_infl = np.array([0.0, 1.0, 1.0, 1.0, \
 
 for dataset in dataset_list: 
  
-    # Data
-    #if dataset == 'Skripal':
-        #...
-    #elif dataset == 'Ukraine':
-        #...
-    #else:
     print("a")
     csvs = glob.glob(f'data/dynamic/{dataset}/*.csv')   
     
@@ -106,33 +100,7 @@ for dataset in dataset_list:
                         out_infl_weights_df.loc[row_index, [edge_type]]=summed_weight
 
             out_infl_weights_df.to_csv(f'{datapath}{name}.csv')
-    
-        '''
-        ### 16x16 TE HEATMAPS ###
-        name = csvfile.replace(str('data/dynamic/'+dataset + "/actor_te_edges_df"), dataset)
-        name = name.replace('.csv', '_heatmap_df')
-
-        if os.path.exists(f'{datapath}{name}16.csv'):
-            print(f"{dataset} heatmap data found, loading...")
-            df_heatmap = pd.read_csv(f'{datapath}{name}16.csv', index_col=0)
-            #df_heatmap = pd.read_pkl(f'{filename}.pkl')
-        else:
-            print(f"no heatmap data found for {dataset}, generating...") 
-            TE_df = pd.read_csv(csvfile) #TODO update to pkl
-            # remove empty rows, was getting div by 0 error on Mariupol theater data
-            Te_df = TE_df.dropna(how='all')
-            #didn't do it, #TODO fix this
-            edge_types = generate_edge_types.generate_edge_types()
-            edge_types.remove('total_te')
-            df_heatmap = pd.DataFrame(index= range(16), columns = edge_types)
-            df_heatmap.index = edge_types
-            for i in edge_types:
-                for j in edge_types:
-                    df_heatmap.at[i, j] = layer_correlation.layer_correlation(TE_df, i, j)
-            #df_heatmap.to_pickle(f'{datapath}.pkl')
-            df_heatmap.to_csv(f'{datapath}{name}16.csv')
-
-        '''
+                   df_heatmap.to_csv(f'{datapath}{name}16.csv')
         ### 4x4 TE HEATMAPS ###
         #TODO don't need to check/load at every timestep
         if os.path.exists(f'{datapath}{name}4.npy'):
