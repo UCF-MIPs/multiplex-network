@@ -5,7 +5,7 @@ from src import layer_correlation
 
 dataset_list = ['Skripal', 'Ukraine', 'Anniversary', 'Biden', 'Bucha_crimes','crimes_un_report','Khersion_retreat',
                 'Mariupol_hospital','Mariupol_theater','Putin_warrant','Russia_mobilize','Russian_missle_cross_Poland',
-                'tanks','Zelensky_visit_the_US']
+                'tanks','Zelensky_visit_the_US', 'Navalny']
 
 for dataset in dataset_list:
     datapath = f'Data/preprocessed/{dataset}/{dataset}_quadrant_preprocessing.csv'
@@ -17,6 +17,8 @@ for dataset in dataset_list:
             df = pd.read_csv('Data/raw/Skripal/Skripal_actor_te_edges_df.csv')
         elif dataset == 'Ukraine':
             df = pd.read_csv('Data/raw/Ukraine/Ukraine_actor_te_edges_df.csv')
+        elif dataset == 'Navalny':
+            df = pd.read_csv('Data/raw/Navalny/Navalny_actor_te_edges_df.csv')
         else:
             df = pd.read_csv(f'Data/raw/Scenarios/{dataset}_actor_te_edges_df.csv')
         aggregated_df = add_aggregate_networks.add_aggr_nets(df)

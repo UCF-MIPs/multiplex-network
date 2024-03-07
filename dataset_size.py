@@ -10,7 +10,7 @@ edge_types = generate_edge_types.generate_edge_types()
 
 dataset_list = ['Skripal', 'Ukraine', 'Anniversary', 'Biden', 'Bucha_crimes','crimes_un_report','Khersion_retreat',
                 'Mariupol_hospital','Mariupol_theater','Putin_warrant','Russia_mobilize','Russian_missle_cross_Poland',
-                'tanks','Zelensky_visit_the_US']
+                'tanks','Zelensky_visit_the_US', 'Navalny']
 
 for dataset in dataset_list:
     if dataset != 'Skripal':
@@ -23,6 +23,8 @@ for dataset in dataset_list:
         te_df_path = 'Data/raw/Skripal/Skripal_actor_te_edges_df.csv'
     elif dataset == 'Ukraine':
         te_df_path = 'Data/raw/Ukraine/Ukraine_actor_te_edges_df.csv'
+    elif dataset == 'Navalny':
+        te_df_path = 'Data/raw/Navalny/Navalny_actor_te_edges_df.csv'
     else:
         te_df_path = f'Data/raw/Scenarios/{dataset}_actor_te_edges_df.csv'
     graph_df = pd.read_csv(te_df_path)

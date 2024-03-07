@@ -101,7 +101,7 @@ def plot_user_heatmap_datasets_comparison(inf, df, results_dir, map_color):
     results_dir:    string of results dir
     '''
     # Data
-    heatmap = np.empty((2, len(df['Skripal'])))
+    heatmap = np.empty((15, len(df['Skripal'])))
     for i, (column_name, column_data) in enumerate(df.items()):
         heatmap[i] = column_data
 
@@ -109,7 +109,7 @@ def plot_user_heatmap_datasets_comparison(inf, df, results_dir, map_color):
     fig = plt.figure(figsize=(20,20))
     ax = fig.add_subplot(111)
     im = ax.imshow(heatmap, interpolation='nearest', vmin= 0, vmax=20, cmap=f'{map_color}')
-    ax.set_yticks(range(2))
+    ax.set_yticks(range(15))
     labels = df.columns
     ax.set_yticklabels(labels, rotation = 45, fontsize = 40)
     ax.set_xticklabels(ax.get_xticklabels(), fontsize = 35)
